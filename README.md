@@ -13,10 +13,13 @@
 [Controlling DC motor using PWM with pic16f778](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/CODE_OF_PWM_OF_MOTOR)
 
 
-## Final Project: 
+## Final Project: Deaf Arabic Sign Language Project 
 
-[Deaf Arabic Sign Language Project](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project)
+* [Full Project Files](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project)
 
+* This projects has two ways of implementatino: 
+  * [Arduino Code](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project/Arduino%20Code)
+  * [Assemply Code](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project/Assemply%20Code)
 
 
 ## Supervisors : 
