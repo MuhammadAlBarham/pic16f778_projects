@@ -10,7 +10,8 @@
 
 ## Additional Bounce Exercise
 
-[Controlling DC motor using PWM with pic16f778](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/CODE_OF_PWM_OF_MOTOR)
+* [Controlling DC motor using PWM with pic16f778](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/CODE_OF_PWM_OF_MOTOR)
+* [YouTube Video](https://youtu.be/dWMfn8JSEEk)
 
 
 ## Final Project: Deaf Arabic Sign Language Project 
@@ -21,6 +22,7 @@
   * [Arduino Code](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project/Arduino%20Code)
   * [Assemply Code](https://github.com/MuhammadAlBarham/pic16f778_projects/tree/main/Final%20Project/Assemply%20Code)
 
+* [Some samples for Sign Language Alphabets](https://youtu.be/jMnGZ_1U0Kc)
 
 ## Supervisors : 
 
