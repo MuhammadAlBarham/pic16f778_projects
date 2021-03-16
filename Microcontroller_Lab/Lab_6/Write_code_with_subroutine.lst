@@ -1,0 +1,284 @@
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[205]: Found directive in column 1. (Include)
+                      00001 Include "p16F84A.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84A processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00208         LIST
+                      00002 ; ----------------------------------------------------------
+                      00003 ; General Purpose RAM Assignments
+                      00004 ; ----------------------------------------------------------
+Warning[205]: Found directive in column 1. (cblock)
+                      00005 cblock          0x0C    
+                      00006 
+Warning[205]: Found directive in column 1. (ENDC)
+                      00007 Endc
+                      00008 
+                      00009 ; ----------------------------------------------------------
+                      00010 ; Macro Definitions
+                      00011 ; ----------------------------------------------------------
+                      00012 ;.
+                      00013 ;.
+                      00014 ;.
+                      00015 ;.
+                      00016 ; ----------------------------------------------------------
+                      00017 ; Vector definition
+                      00018 ; ----------------------------------------------------------
+0000                  00019                         org 0x000
+0000   0000           00020                         nop
+0001   2805           00021                         goto Main
+                      00022                 
+0004                  00023 INT_Routine     org 0x004
+0004   2804           00024                 goto INT_Routine
+                      00025 ; ----------------------------------------------------------
+                      00026 ; The main Program
+                      00027 ; ---------------------------------------------------------- 
+                      00028 ;This code have been repier by "Hunter98" 
+                      00029 ;Muhammad Al-Brham (Don't Leave Your Dream) 
+0005                  00030 Main       
+Warning[203]: Found opcode in column 1. (Movlw)
+0005   30FF           00031 Movlw       0xFF                         ;Move the value of the Adress to w-Reg
+Warning[203]: Found opcode in column 1. (Movwf)
+0006   0089           00032 Movwf       EEADR                        ;Move the Adress to be written inside it 
+Warning[203]: Found opcode in column 1. (Movlw)
+0007   304D           00033 Movlw           A'M'                     ;Move the character to W-Reg
+Warning[203]: Found opcode in column 1. (call)
+0008   2018           00034 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+0009   3055           00035 Movlw           A'U'
+Warning[203]: Found opcode in column 1. (call)
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+000A   2018           00036 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+000B   3048           00037 Movlw           A'H'
+Warning[203]: Found opcode in column 1. (call)
+000C   2018           00038 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+000D   3041           00039 Movlw           A'A'
+Warning[203]: Found opcode in column 1. (call)
+000E   2018           00040 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+000F   304D           00041 Movlw           A'M'
+Warning[203]: Found opcode in column 1. (call)
+0010   2018           00042 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+0011   304D           00043 Movlw           A'M'
+Warning[203]: Found opcode in column 1. (call)
+0012   2018           00044 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+0013   3041           00045 Movlw           A'A'
+Warning[203]: Found opcode in column 1. (call)
+0014   2018           00046 call Repeat_code
+Warning[203]: Found opcode in column 1. (Movlw)
+0015   3044           00047 Movlw           A'D'
+Warning[203]: Found opcode in column 1. (call)
+0016   2018           00048 call Repeat_code
+Warning[203]: Found opcode in column 1. (goto)
+0017   2827           00049 goto finish
+                      00050 ; ----------------------------------------------------------
+                      00051 ; Sub Routine Definitions
+                      00052 ; ----------------------------------------------------------
+0018                  00053 Repeat_code
+Warning[203]: Found opcode in column 1. (Bcf)
+0018   1283           00054 Bcf                     STATUS,RP0               ;Go to bank 0 
+Warning[203]: Found opcode in column 1. (Movwf)
+0019   0088           00055 Movwf           EEDATA               ;Move the character  to EEDATA
+Warning[203]: Found opcode in column 1. (Incf)
+001A   0A89           00056 Incf            EEADR,f              ;Increment Adress by 1 
+Warning[203]: Found opcode in column 1. (Bsf)
+001B   1683           00057 Bsf                     STATUS, RP0          ;Go to bank 1
+Warning[203]: Found opcode in column 1. (Bcf)
+001C   138B           00058 Bcf                     INTCON, GIE          ;Disable all INTS
+Warning[203]: Found opcode in column 1. (Bsf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001D   1508           00059 Bsf                     EECON1, WREN         ;Enble to write
+                      00060 ;------------------------------------------------------
+                      00061 ;This code is requiered from datasheet   
+Warning[203]: Found opcode in column 1. (Movlw)
+001E   3055           00062 Movlw           0x55                 
+Warning[203]: Found opcode in column 1. (Movwf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001F   0089           00063 Movwf           EECON2 
+Warning[203]: Found opcode in column 1. (Movlw)
+0020   30AA           00064 Movlw           0xAA
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Warning[203]: Found opcode in column 1. (Movwf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0021   0089           00065 Movwf           EECON2 
+Warning[203]: Found opcode in column 1. (Bsf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0022   1488           00066 Bsf                     EECON1,WR 
+Warning[203]: Found opcode in column 1. (Bsf)
+0023   178B           00067 Bsf                     INTCON, GIE 
+                      00068 ;------------------------------------------------------
+                      00069 ;This code to test if the Write process end or not 
+0024                  00070 Test 
+Warning[203]: Found opcode in column 1. (Btfsc)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0024   1888           00071 Btfsc           EECON1,WR   ;If the WR=0 ,this mean the Write process end !!
+Warning[203]: Found opcode in column 1. (Goto)
+0025   2824           00072 Goto            Test
+Warning[203]: Found opcode in column 1. (return)
+0026   0008           00073 return
+                      00074  
+0027                  00075 finish
+                      00076 
+Warning[203]: Found opcode in column 1. (nop)
+0027   0000           00077 nop                     
+Warning[205]: Found directive in column 1. (end)
+                      00078 end                             
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+INT_Routine                       00000004
+IRP                               00000007
+Main                              00000005
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+Repeat_code                       00000018
+STATUS                            00000003
+T0CS                              00000005
+T0IE                              00000005
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+Test                              00000024
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_DEVID1                           00002006
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+__DEBUG                           1
+finish                            00000027
+MPASM  5.51    WRITE_CODE_WITH_SUBROUTINE.ASM   7-3-2018  19:21:05         PAGE  6
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+
+0000 : XX--XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXX-------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    38
+Program Memory Words Free:   986
+
+
+Errors   :     0
+Warnings :    39 reported,     0 suppressed
+Messages :     5 reported,     0 suppressed
+
+

@@ -1,0 +1,37 @@
+MPLINK 4.49, Linker
+Linker Map File - Created Sat Jun 16 17:43:48 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x00003e
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x00001e      
+            31 out of 1094 program addresses used, program memory utilization is 2%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    Equal   0x000018    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                   Finish   0x00001e    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                  Greater   0x000015    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                  Smaller   0x00001b    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                  Greater   0x000015    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                    Equal   0x000018    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                  Smaller   0x00001b    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+                   Finish   0x00001e    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol3.asm
+
+

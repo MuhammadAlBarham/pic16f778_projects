@@ -1,0 +1,32 @@
+D_A_Convert
+movf 	D_val,0 
+sublw 	D'25'
+btfsc	STATUS,C
+retlw 	0x30
+
+movf 	D_val,0 
+sublw 	D'76'
+btfsc	STATUS,C
+retlw 	0x31
+
+movf 	D_val,0 
+sublw 	D'127'
+btfsc	STATUS,C
+retlw 	0x32
+
+movf 	D_val,0 
+sublw 	D'178'
+btfsc	STATUS,C
+retlw 	0x33
+
+movf 	D_val,0 
+sublw 	D'229'
+btfsc	STATUS,C
+retlw 	0x34
+
+movf 	D_val,0 
+sublw 	D'255'
+btfsc	STATUS,C
+retlw 	0x35
+
+retlw   0x30

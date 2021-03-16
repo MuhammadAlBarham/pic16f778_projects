@@ -1,0 +1,487 @@
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;**********************************************************
+                      00002 ; This program control a bottle labeling and packing machine.
+                      00003 ; Photocell sensor is connected into RB0
+                      00004 ; 7-Segments is connected to PORTB (We connect RB1 to a, RB2 to b ???.And RB7 to g)
+                      00005 ; Digits selection of bottles number 7-Segments is connected to RA0
+                      00006 ; Digits selection of cartoon number 7-Segments is connected to RA1
+                      00007 ; Conveyer belt motor is connected to RA2
+                      00008 ; Label actuator is connected to RA3
+                      00009 ; START pushbutton is connected to RA4
+                      00010 ; The program uses a PIC16F84A running at crystal oscillator of frequency 4MHz. 
+                      00011 ;**********************************************************
+                      00012  include "p16f84A.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84A processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00208         LIST
+                      00013 ;**********************************************************
+                      00014 ; Macro definitions
+                      00015 
+                      00016 push    macro
+                      00017 
+                      00018         movwf           WTemp               ; WTemp must be reserved in all banks
+                      00019         swapf           STATUS,W                ; store in W without affecting status bits
+                      00020         banksel     StatusTemp          ; select StatusTemp bank
+                      00021         movwf           StatusTemp              ; save STATUS
+                      00022         endm
+                      00023 
+                      00024 pop     macro
+                      00025 
+                      00026         banksel     StatusTemp          ; point to StatusTemp bank
+                      00027         swapf           StatusTemp,W            ; unswap STATUS nibbles into W  
+                      00028         movwf           STATUS          ; restore STATUS
+                      00029         swapf           WTemp,F         ; unswap W nibbles
+                      00030         swapf           WTemp,W         ; restore W without affecting STATUS
+                      00031         endm
+                      00032 ;**********************************************************
+                      00033 ; User-defined variables
+                      00034         cblock          0x0C            ; bank 0 assignments
+  0000000C            00035         WTemp   
+  0000000D            00036         StatusTemp
+  0000000E            00037         photocell                       ;Add all variables here.
+  0000000F            00038     start
+  00000010            00039         Digit_select_bottle 
+  00000011            00040     Digit_select_cartoon
+  00000012            00041         conveyor_belt_motor
+  00000013            00042     label_actuator  
+                      00043 ;--------------------
+  00000014            00044     counter1                            
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000015            00045         counter2
+  00000016            00046     bottle_num
+  00000017            00047     cartoon_num
+                      00048         endc
+                      00049 ;**********************************************************
+                      00050 ; Start of executable code
+0000                  00051         org     0x00            
+0000   0000           00052         nop
+0001   2025           00053     call Delay 
+0002   2805           00054         goto            Main            
+0004                  00055         org     0x04                    ;Reset vector
+0004   283E           00056         goto            INT_SVC
+                      00057         ;;;;;;; Main program ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0005                  00058 Main
+0005   2009           00059         call    Initial         ;Initialize everything
+0006                  00060 MainLoop
+0006   2016           00061         call    Bottle_Number           ;Check if the number of bottles reaches to nine
+0007   201B           00062         call    Cartoon_Number          ;Check if the number of packing bottles reaches to nine.
+0008   2806           00063         goto    MainLoop                        ;Do it again
+                      00064 ;;;;;;; Initial subroutine ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00065 ; This subroutine performs all initializations of variables and registers.
+0009                  00066 Initial 
+                      00067 ;First initialize the PORTA & PORTB 
+Warning[203]: Found opcode in column 1. (bsf)
+0009   1403           00068 bsf STATUS,RB0         ;Go to bank 1 
+                      00069 ;Initilize the PORTA 
+Warning[203]: Found opcode in column 1. (movlw)
+000A   3010           00070 movlw b'10000'         ;"input/output/output/output/output"
+Warning[203]: Found opcode in column 1. (movwf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   0085           00071 movwf TRISA                ;Initialization  of the PORTA 
+                      00072 ;Initilize the PORTB
+Warning[203]: Found opcode in column 1. (movlw)
+000C   3001           00073 movlw b'00000001'      ;"output/output/output/output/output/output/output/Input"
+Warning[203]: Found opcode in column 1. (movwf)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000D   0086           00074 movwf  TRISB           ;Initialization  of the PORTB 
+Warning[203]: Found opcode in column 1. (bcf)
+000E   1003           00075 bcf STATUS,RB0         ;Goto bank 0 
+                      00076 ;Initilaze the PORTS with Initial Values 
+Warning[203]: Found opcode in column 1. (movlw)
+000F   30FE           00077 movlw b'011111110'     ;Initilize the PORTB with value 0 (Show Num on 7-seg)
+Warning[203]: Found opcode in column 1. (movwf)
+0010   0086           00078 movwf PORTB  
+Warning[203]: Found opcode in column 1. (movlw)
+0011   3005           00079 movlw b'00101' 
+Warning[203]: Found opcode in column 1. (movwf)
+0012   0085           00080 movwf PORTA
+Warning[203]: Found opcode in column 1. (bsf)
+0013   178B           00081 bsf INTCON,GIE        ;Enable the global interrupt enable 
+Warning[203]: Found opcode in column 1. (bsf)
+0014   160B           00082 bsf INTCON,INTE       ;Enable the  External Interrupt 
+0015   0008           00083         Return
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00084 ;;;;;;; Bottle_Number subroutine ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00085 ; This subroutine Test if the number of bottles reaches to nine. 
+0016                  00086 Bottle_Number
+Warning[203]: Found opcode in column 1. (movlw)
+0016   3009           00087 movlw D'9'
+Warning[203]: Found opcode in column 1. (subwf)
+0017   0216           00088 subwf bottle_num,W      ; The number of the bottle 
+Warning[203]: Found opcode in column 1. (btfss)
+0018   1D03           00089 btfss STATUS,Z          ; Check if the number of the bottle reach 9 or not ? 
+Warning[203]: Found opcode in column 1. (goto)
+0019   2816           00090 goto Bottle_Number
+Warning[203]: Found opcode in column 1. (Return)
+001A   0008           00091 Return 
+                      00092 ;Return
+                      00093 ;**********************************************************
+                      00094 ;;;;;;; Cartoon_Number subroutine ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00095 ; This subroutine Test if the number of packing bottles reaches to nine.
+001B                  00096 Cartoon_Number   
+001B   1105           00097         bcf PORTA,RA2         ;Stop the conveyor belt
+001C   2025           00098         call Delay            ;These 3 statement of call delay  
+001D   2025           00099         call Delay            ;Take approximetaly 3.6 s 
+001E   2025           00100         call Delay  
+001F   3009           00101         movlw D'9'
+0020   0217           00102         subwf cartoon_num,W 
+0021   1D03           00103         btfss STATUS,Z 
+0022   2816           00104         goto  Bottle_Number
+0023   2857           00105         goto  Check_start 
+Warning[207]: Found label after column 1. (End_the_code)
+0024                  00106     End_the_code 
+0024   0008           00107     Return 
+                      00108 ;**********************************************************
+                      00109 ;;;;;;; Delay subroutine ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00110 ; This subroutine to get a delay with 1.2 Sec.
+0025                  00111 Delay                   ; This code take delay equal to (1.200755)*10^6 
+Warning[203]: Found opcode in column 1. (movlw)
+Warning[202]: Argument out of range.  Least significant bits used.
+0025   3050           00112 movlw 250
+Warning[203]: Found opcode in column 1. (movwf)
+0026   0094           00113 movwf counter1           
+0027                  00114 repeat 
+Warning[203]: Found opcode in column 1. (call)
+0027   2030           00115 call sub_delay 
+Warning[203]: Found opcode in column 1. (call)
+0028   2030           00116 call sub_delay 
+Warning[203]: Found opcode in column 1. (call)
+0029   2030           00117 call sub_delay  
+Warning[203]: Found opcode in column 1. (call)
+002A   2030           00118 call sub_delay 
+Warning[203]: Found opcode in column 1. (call)
+002B   2030           00119 call sub_delay 
+Warning[203]: Found opcode in column 1. (call)
+002C   2030           00120 call sub_delay 
+Warning[203]: Found opcode in column 1. (decfsz)
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+002D   0B94           00121 decfsz counter1,f
+Warning[203]: Found opcode in column 1. (goto)
+002E   2827           00122 goto repeat 
+002F   0008           00123          Return
+0030                  00124 sub_delay                ;This sub_delay has 800 machine cycle 
+Warning[203]: Found opcode in column 1. (movlw)
+Warning[202]: Argument out of range.  Least significant bits used.
+0030   3059           00125 movlw 159 
+Warning[203]: Found opcode in column 1. (movwf)
+0031   0095           00126 movwf counter2
+0032                  00127 repeat2
+Warning[203]: Found opcode in column 1. (nop)
+0032   0000           00128 nop 
+Warning[203]: Found opcode in column 1. (nop)
+0033   0000           00129 nop 
+Warning[203]: Found opcode in column 1. (decfsz)
+0034   0B95           00130 decfsz counter2,1 
+Warning[203]: Found opcode in column 1. (goto)
+0035   2832           00131 goto repeat2 
+0036   0008           00132      Return 
+                      00133 ;**********************************************************
+                      00134 ; Bottle_Labeling
+0037                  00135 Bottle_Labeling
+0037   108B           00136         bcf         INTCON, INTF        ;Clear the External interrupt flag
+                      00137 ;       write the code here
+0038   3001           00138     movlw  D'1'
+Message[305]: Using default destination of 1 (file).
+0039   0796           00139     addwf  bottle_num
+003A   204B           00140     call   Look_Up
+003B   0086           00141     movwf  PORTB             ;Move the Number to Show it in 7-seg.
+003C   2025           00142     call   Delay             ;The value of the Delay equal to 1.2 Second 
+003D   2843           00143         goto            POLL             ;Check for another interrupt
+                      00144 ;**********************************************************
+003E                  00145 INT_SVC
+Warning[203]: Found opcode in column 1. (bcf)
+003E   138B           00146 bcf INTCON,GIE                       ;Disable the Interrupt 
+Warning[206]: Found call to macro in column 1. (push)
+                      00147 push
+                          M 
+003F   008C               M         movwf           WTemp               ; WTemp must be reserved in all banks
+0040   0E03               M         swapf           STATUS,W                ; store in W without affecting status bits
+0041   1283               M         banksel     StatusTemp          ; select StatusTemp bank
+0042   008D               M         movwf           StatusTemp              ; save STATUS
+0043                  00148 POLL 
+0043   188B           00149         btfsc           INTCON, INTF        ; Check for an External Interrupt
+0044   2837           00150         goto            Bottle_Labeling
+                      00151 ;       btfsc   ...                                     ; Check for another interrupt
+                      00152 ;       call    ...
+                      00153 ;       btfsc   ...                                     ; Check for another interrupt
+                      00154 ;       call    ...
+                      00155         pop
+                          M 
+0045   1283               M         banksel     StatusTemp          ; point to StatusTemp bank
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0046   0E0D               M         swapf           StatusTemp,W            ; unswap STATUS nibbles into W  
+0047   0083               M         movwf           STATUS          ; restore STATUS
+0048   0E8C               M         swapf           WTemp,F         ; unswap W nibbles
+0049   0E0C               M         swapf           WTemp,W         ; restore W without affecting STATUS
+004A   0009           00156         retfie
+                      00157 
+                      00158 ;**********************************************************
+                      00159 ; ----------------------------------------------------------
+                      00160 ; Sub Routine Definitions
+                      00161 ; ----------------------------------------------------------
+Warning[207]: Found label after column 1. (Look_Up)
+004B                  00162     Look_Up
+                      00163 
+Warning[203]: Found opcode in column 1. (Movf)
+004B   0816           00164 Movf        bottle_num,W
+Warning[203]: Found opcode in column 1. (Addwf)
+004C   0782           00165 Addwf       PCL,f
+Warning[203]: Found opcode in column 1. (Retlw)
+004D   347E           00166 Retlw       B'01111110'  ;NUMBER 0
+Warning[203]: Found opcode in column 1. (Retlw)
+004E   340C           00167 Retlw       B'00001100'  ;NUMBER 1
+Warning[203]: Found opcode in column 1. (Retlw)
+004F   34B6           00168 Retlw       B'10110110'  ;NUMBER 2
+Warning[203]: Found opcode in column 1. (Retlw)
+0050   349E           00169 Retlw       B'10011110'  ;NUMBER 3 
+Warning[203]: Found opcode in column 1. (Retlw)
+0051   34CC           00170 Retlw       B'11001100'  ;NUMBER 4
+Warning[203]: Found opcode in column 1. (Retlw)
+0052   34DA           00171 Retlw       B'11011010'  ;NUMBER 5
+Warning[203]: Found opcode in column 1. (Retlw)
+0053   34FA           00172 Retlw       B'11111010'  ;NUMBER 6
+Warning[203]: Found opcode in column 1. (Retlw)
+0054   340E           00173 Retlw       B'00001110'  ;NUMBER 7
+Warning[203]: Found opcode in column 1. (Retlw)
+0055   34FE           00174 Retlw       B'11111110'  ;NUMBER 8
+Warning[203]: Found opcode in column 1. (Retlw)
+0056   34E6           00175 Retlw       B'11100110'  ;NUMBER 9
+                      00176 ;***********************************************************
+                      00177 
+                      00178 ;***********************************************************
+0057                  00179 Check_start
+Warning[203]: Found opcode in column 1. (bcf)
+0057   1005           00180 bcf PORTA,RA0 
+Warning[203]: Found opcode in column 1. (bsf)
+0058   1485           00181 bsf PORTA,RA1
+Warning[203]: Found opcode in column 1. (movlw)
+0059   3009           00182 movlw D'9'
+Warning[203]: Found opcode in column 1. (call)
+005A   204B           00183 call Look_Up 
+005B                  00184 check_start1
+Warning[203]: Found opcode in column 1. (btfss)
+005B   1E05           00185 btfss PORTA,RA4                                  ;Check if the Start Button begin or not 
+Warning[203]: Found opcode in column 1. (goto)
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+005C   285B           00186 goto check_start1
+Warning[203]: Found opcode in column 1. (movlw)
+005D   3000           00187 movlw b'00000000'
+Warning[203]: Found opcode in column 1. (movwf)
+005E   0086           00188 movwf PORTB
+                      00189 ;bsf PORTA,RA0
+                      00190 ;bcf PORTA,RA1
+                      00191 ;bsf PORTA,RA2 
+                      00192 ;bcf PORTA,RA3
+                      00193 ;bcf PORTA,RA4
+Warning[203]: Found opcode in column 1. (movlw)
+005F   3005           00194 movlw b'00000101' 
+Warning[203]: Found opcode in column 1. (movwf)
+0060   0085           00195 movwf PORTA
+Warning[203]: Found opcode in column 1. (bsf)
+0061   178B           00196 bsf INTCON,GIE 
+Warning[203]: Found opcode in column 1. (bsf)
+0062   160B           00197 bsf INTCON,INTE
+Warning[203]: Found opcode in column 1. (goto)
+0063   2824           00198 goto  End_the_code
+                      00199         End
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+Bottle_Labeling                   00000037
+Bottle_Number                     00000016
+C                                 00000000
+Cartoon_Number                    0000001B
+Check_start                       00000057
+DC                                00000001
+Delay                             00000025
+Digit_select_bottle               00000010
+Digit_select_cartoon              00000011
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+End_the_code                      00000024
+F                                 00000001
+FSR                               00000004
+GIE                               00000007
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+INT_SVC                           0000003E
+IRP                               00000007
+Initial                           00000009
+Look_Up                           0000004B
+Main                              00000005
+MainLoop                          00000006
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+POLL                              00000043
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+STATUS                            00000003
+StatusTemp                        0000000D
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+WTemp                             0000000C
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_DEVID1                           00002006
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+MPASM  5.51                  LAB_SKELATON.ASM   7-2-2018  8:07:12         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+__DEBUG                           1
+bottle_num                        00000016
+cartoon_num                       00000017
+check_start1                      0000005B
+conveyor_belt_motor               00000012
+counter1                          00000014
+counter2                          00000015
+label_actuator                    00000013
+photocell                         0000000E
+pop                               
+push                              
+repeat                            00000027
+repeat2                           00000032
+start                             0000000F
+sub_delay                         00000030
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXX-XXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX
+0040 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXX XXXX------------ ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    99
+Program Memory Words Free:   925
+
+
+Errors   :     0
+Warnings :    64 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

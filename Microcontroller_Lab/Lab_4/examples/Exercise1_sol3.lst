@@ -1,0 +1,258 @@
+MPASM  5.51                EXERCISE1_SOL3.ASM   6-16-2018  17:43:47         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include "p16F84A.inc"
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ;  MPASM PIC16F84A processor include
+                      00005 ; 
+                      00006 ;  (c) Copyright 1999-2013 Microchip Technology, All rights reserved
+                      00007 ;==========================================================================
+                      00008 
+                      00208         LIST
+Warning[205]: Found directive in column 1. (cblock)
+                      00002 cblock 0x25 
+  00000025            00003 test  ; The Input Number        
+  00000026            00004 test1 ; The Number After Swapping
+  00000027            00005 MSB   ; The most Nibble         
+  00000028            00006 LSB   ; The Least Nibble 
+  00000029            00007 Result ; The Result of the Check
+Warning[205]: Found directive in column 1. (ENDC)
+                      00008 endc 
+                      00009 ; Here An Example to This Code :
+                      00010 ;test =0x49  
+Warning[203]: Found opcode in column 1. (swapf)
+0000   0E25           00011 swapf test,0
+Warning[203]: Found opcode in column 1. (movwf)
+0001   00A6           00012 movwf test1 
+Warning[203]: Found opcode in column 1. (bcf)
+0002   1225           00013 bcf test,4
+Warning[203]: Found opcode in column 1. (bcf)
+0003   12A5           00014 bcf test,5
+Warning[203]: Found opcode in column 1. (bcf)
+0004   1325           00015 bcf test,6
+Warning[203]: Found opcode in column 1. (bcf)
+0005   13A5           00016 bcf test,7 
+                      00017 
+Warning[203]: Found opcode in column 1. (bcf)
+0006   1226           00018 bcf test1,4
+Warning[203]: Found opcode in column 1. (bcf)
+0007   12A6           00019 bcf test1,5
+Warning[203]: Found opcode in column 1. (bcf)
+0008   1326           00020 bcf test1,6
+Warning[203]: Found opcode in column 1. (bcf)
+0009   13A6           00021 bcf test1,7 
+                      00022 
+Warning[203]: Found opcode in column 1. (movf)
+000A   0825           00023 movf test,0
+Warning[203]: Found opcode in column 1. (movwf)
+000B   00A8           00024 movwf LSB 
+Warning[203]: Found opcode in column 1. (movf)
+000C   0826           00025 movf test1,0
+Warning[203]: Found opcode in column 1. (movwf)
+000D   00A7           00026 movwf MSB 
+Warning[203]: Found opcode in column 1. (movf)
+000E   0828           00027 movf LSB,0
+MPASM  5.51                EXERCISE1_SOL3.ASM   6-16-2018  17:43:47         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00028 
+Warning[203]: Found opcode in column 1. (subwf)
+000F   0227           00029 subwf MSB,0     ; Sub MSB-LSB           
+                      00030                  ; Example : 0xN1N2
+                      00031                  ; Where N1:Most Nibble & N2:Least Nibble 
+                      00032                  ;  if N1>N2  result G 'Greater'
+                      00033                  ;  if N2<N1  result S 'Smaller'
+                      00034                  ;  if N2=N1  result E 'Equal'  
+                      00035 
+Warning[203]: Found opcode in column 1. (btfsc)
+0010   1903           00036 btfsc 0x03,2         ; 0x03 is the Address of the Status Register , 0 is the Carry  Bit  
+Warning[203]: Found opcode in column 1. (goto)
+0011   2818           00037 goto Equal 
+                      00038 
+Warning[203]: Found opcode in column 1. (btfsc)
+0012   1803           00039 btfsc 0x03,0         ; 0x03 is the Address of the Status Register , 0 is the carrry Bit  
+Warning[203]: Found opcode in column 1. (goto)
+0013   2815           00040 goto Greater 
+Warning[203]: Found opcode in column 1. (goto)
+0014   281B           00041 goto Smaller 
+                      00042 
+0015                  00043 Greater 
+Warning[203]: Found opcode in column 1. (movlw)
+0015   3047           00044 movlw A'G'
+Warning[203]: Found opcode in column 1. (movwf)
+0016   00A9           00045 movwf Result 
+Warning[203]: Found opcode in column 1. (goto)
+0017   281E           00046 goto Finish 
+                      00047 
+0018                  00048 Equal 
+Warning[203]: Found opcode in column 1. (movlw)
+0018   3045           00049 movlw A'E' 
+Warning[203]: Found opcode in column 1. (movwf)
+0019   00A9           00050 movwf Result 
+Warning[203]: Found opcode in column 1. (goto)
+001A   281E           00051 goto Finish 
+                      00052 
+001B                  00053 Smaller 
+Warning[203]: Found opcode in column 1. (movlw)
+001B   3053           00054 movlw A'S' 
+Warning[203]: Found opcode in column 1. (movwf)
+001C   00A9           00055 movwf Result 
+Warning[203]: Found opcode in column 1. (goto)
+001D   281E           00056 goto Finish 
+                      00057 
+001E                  00058 Finish 
+Warning[203]: Found opcode in column 1. (nop)
+001E   0000           00059 nop 
+Warning[205]: Found directive in column 1. (end)
+                      00060 end 
+MPASM  5.51                EXERCISE1_SOL3.ASM   6-16-2018  17:43:47         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+DC                                00000001
+EEADR                             00000009
+EECON1                            00000088
+EECON2                            00000089
+EEDATA                            00000008
+EEIE                              00000006
+EEIF                              00000004
+Equal                             00000018
+F                                 00000001
+FSR                               00000004
+Finish                            0000001E
+GIE                               00000007
+Greater                           00000015
+INDF                              00000000
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IRP                               00000007
+LSB                               00000028
+MSB                               00000027
+NOT_PD                            00000003
+NOT_RBPU                          00000007
+NOT_TO                            00000004
+OPTION_REG                        00000081
+PCL                               00000002
+PCLATH                            0000000A
+PORTA                             00000005
+PORTB                             00000006
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RD                                00000000
+RP0                               00000005
+RP1                               00000006
+Result                            00000029
+MPASM  5.51                EXERCISE1_SOL3.ASM   6-16-2018  17:43:47         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+STATUS                            00000003
+Smaller                           0000001B
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+TMR0                              00000001
+TMR0IE                            00000005
+TMR0IF                            00000002
+TRISA                             00000085
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+W                                 00000000
+WR                                00000001
+WREN                              00000002
+WRERR                             00000003
+Z                                 00000002
+_CONFIG                           00002007
+_CP_OFF                           00003FFF
+_CP_ON                            0000000F
+_DEVID1                           00002006
+_FOSC_EXTRC                       00003FFF
+_FOSC_HS                          00003FFE
+_FOSC_LP                          00003FFC
+_FOSC_XT                          00003FFD
+_HS_OSC                           00003FFE
+_IDLOC0                           00002000
+_IDLOC1                           00002001
+_IDLOC2                           00002002
+_IDLOC3                           00002003
+_LP_OSC                           00003FFC
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FF7
+_RC_OSC                           00003FFF
+_WDTE_OFF                         00003FFB
+_WDTE_ON                          00003FFF
+_WDT_OFF                          00003FFB
+_WDT_ON                           00003FFF
+_XT_OSC                           00003FFD
+__16F84A                          00000001
+__DEBUG                           1
+MPASM  5.51                EXERCISE1_SOL3.ASM   6-16-2018  17:43:47         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+test                              00000025
+test1                             00000026
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXXXXXXX XXXXXXXXXXXXXXX- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    31
+Program Memory Words Free:   993
+
+
+Errors   :     0
+Warnings :    34 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

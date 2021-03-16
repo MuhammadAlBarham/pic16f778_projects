@@ -1,0 +1,37 @@
+MPLINK 4.49, Linker
+Linker Map File - Created Sat Jun 16 17:30:35 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000034
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000019      
+            26 out of 1094 program addresses used, program memory utilization is 2%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    Equal   0x000013    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                   Finish   0x000019    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                  Greater   0x000010    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                  Smaller   0x000016    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                  Greater   0x000010    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                    Equal   0x000013    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                  Smaller   0x000016    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+                   Finish   0x000019    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\Exercise1_sol2.asm
+
+

@@ -1,0 +1,40 @@
+MPLINK 4.49, Linker
+Linker Map File - Created Sat Jun 16 15:22:43 2018
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000000
+                   .org_1       code   0x000000    program   0x000022
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000010      
+            17 out of 1094 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    Equal   0x00000e    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                   Finish   0x000010    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                  Greater   0x000008    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                     Main   0x000000    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                  Smaller   0x00000b    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     Main   0x000000    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                  Greater   0x000008    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                  Smaller   0x00000b    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                    Equal   0x00000e    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+                   Finish   0x000010    program     static C:\Users\Muhammad Albrham\Desktop\Microcontroller_Lab\Lab_4\test_1.asm
+
+

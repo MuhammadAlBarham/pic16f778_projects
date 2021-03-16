@@ -1,0 +1,61 @@
+MPASM  5.51                       EXAMPLE.ASM   6-12-2018  16:32:03         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  00000011            00001 loc1 equ 0x11 
+  00000033            00002 loc2 equ 0x33 
+  00000020            00003 loc3 equ 20 
+Warning[203]: Found opcode in column 1. (movlw)
+0000   3005           00004 movlw 5 
+Warning[203]: Found opcode in column 1. (movwf)
+0001   0091           00005 movwf loc1 
+Warning[203]: Found opcode in column 1. (movlw)
+0002   3004           00006 movlw 4 
+Warning[203]: Found opcode in column 1. (movwf)
+0003   00B3           00007 movwf loc2 
+Warning[203]: Found opcode in column 1. (movf)
+0004   0833           00008 movf loc2,0
+Warning[203]: Found opcode in column 1. (movwf)
+0005   00A0           00009 movwf loc3 
+Warning[203]: Found opcode in column 1. (movf)
+0006   0811           00010 movf loc1,0
+Warning[203]: Found opcode in column 1. (movwf)
+0007   00B3           00011 movwf loc2 
+Warning[203]: Found opcode in column 1. (movf)
+0008   0820           00012 movf loc3,0
+Warning[203]: Found opcode in column 1. (movwf)
+0009   0091           00013 movwf loc1
+Warning[203]: Found opcode in column 1. (nop)
+000A   0000           00014 nop
+Warning[205]: Found directive in column 1. (end)
+                      00015 end 
+MPASM  5.51                       EXAMPLE.ASM   6-12-2018  16:32:03         PAGE  2
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+__16F84A                          00000001
+__DEBUG                           1
+loc1                              00000011
+loc2                              00000033
+loc3                              00000020
+
+
+MEMORY USAGE MAP ('X' = Used,  '-' = Unused)
+
+0000 : XXXXXXXXXXX----- ---------------- ---------------- ----------------
+
+All other memory blocks unused.
+
+Program Memory Words Used:    11
+Program Memory Words Free:  1013
+
+
+Errors   :     0
+Warnings :    12 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+
